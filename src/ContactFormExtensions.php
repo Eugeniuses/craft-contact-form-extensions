@@ -214,7 +214,11 @@ class ContactFormExtensions extends Plugin
             // Override toEmail setting
             if (is_array($e->submission->message) && array_key_exists('toEmail', $e->submission->message)) {
                 $email = Craft::$app->security->validateData($e->submission->message['toEmail']);
-                $e->toEmails = explode(',', $email);
+                if(filter_var($email, FILTER_VALIDATE_EMAIL)){
+                    $e->toEmails = explode(',', $email);    
+                } else {
+                    $e->toEmails = [];
+                }
             }
 
             // Notification Template and overrides
